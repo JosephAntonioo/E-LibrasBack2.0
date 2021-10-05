@@ -8,7 +8,7 @@ mp_hands = mp.solutions.hands
 
 # For static images:
 def handtracked():
-    IMAGE_FILES = ['./hand.jpg']
+    IMAGE_FILES = ['./teste.jpg']
     with mp_hands.Hands(
         static_image_mode=True,
         max_num_hands=2,
@@ -41,6 +41,7 @@ def handtracked():
                         mp_drawing_styles.get_default_hand_connections_style())
                 cv2.imshow(
                    '/tmp/annotated_image' + str(idx) + '.png', cv2.flip(annotated_image, 1))
+                cv2.imwrite('tracked.png', annotated_image)
                 listHandTrack = list(mp_hands.HAND_CONNECTIONS)
                 palma = []
                 polegar = []

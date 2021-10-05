@@ -23,54 +23,34 @@ import io
 ## Start Stuffs
 app = Flask(__name__)
 api = Api(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-db = SQLAlchemy(app)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+# db = SQLAlchemy(app)
 ## Start Stuffs
-
-def decode_base64(data, altchars=b'+/'):
-    """Decode base64, padding being optional.
-
-    :param data: Base64 data as an ASCII byte string
-    :returns: The decoded byte string.
-
-    """
-    data = re.sub(rb'[^a-zA-Z0-9%s]+' % altchars, b'', data)  # normalize
-    missing_padding = len(data) % 4
-    if missing_padding:
-        data += b'='* (4 - missing_padding)
-    return base64.b64decode(data, altchars)
-
-
 class HelloWorld(Resource):
     def get(self):
         handtracked()
         return {"data" : "Hello World"}
 
 
-# Método Get que leva a um def com uma img já setada, usa isso como base para o post
 class HandTracked(Resource):
     def get(self):
         return handtracked()
 
-# Método post já recebe a img em base64 por string em um json que é alocada em uma const aqui
-class ImgString(Resource):
+class ImgPost(Resource):
     def post(self):
-        data = request.json
-        dataI = str(jsonify(data).data)
-        print(str.__sizeof__(dataI))
-        print(dataI)
-        return dataI
+        file = request.files['image']
+        img = Image.open(file.stream)
+        img.save('teste.jpg')
+        handtracked()
+        return jsonify({'msg':'sucess','size':[img.width, img.height]}) 
 
 
-
-        
-
-
-
-
+#method, request route
 api.add_resource(HelloWorld, "/helloworld")
 api.add_resource(HandTracked, "/hts")
-api.add_resource(ImgString, "/post")
+api.add_resource(ImgPost, "/post")
+
+
 ##Starta o server no debugger mode entao devmode
 if __name__ == "__main__":
 	app.run(debug=True, host= '0.0.0.0')
