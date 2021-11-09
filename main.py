@@ -1,6 +1,6 @@
 from typing import Sized
-from flask.wrappers import Request
-from werkzeug.utils import redirect, secure_filename
+# from flask.wrappers import Request
+# from werkzeug.utils import redirect, secure_filename
 from MediaPipe.mediapipeMain import handtracked
 from flask import Flask, request, flash,jsonify
 from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
@@ -26,9 +26,11 @@ api = Api(app)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 # db = SQLAlchemy(app)
 ## Start Stuffs
+
 class HelloWorld(Resource):
     def get(self):
-        handtracked()
+        # handtracked()
+        print('deu boa')
         return {"data" : "Hello World"}
 
 
@@ -38,17 +40,25 @@ class HandTracked(Resource):
 
 class ImgPost(Resource):
     def post(self):
+        print('cheogu aqui')
         file = request.files['image']
         img = Image.open(file.stream)
         img.save('teste.jpg')
-        handtracked()
         return jsonify({'msg':'sucess','size':[img.width, img.height]}) 
 
+
+@app.route('/post', methods = ['POST'])
+def upload_file():
+    print('chegou aqui!')
+   if request.method == 'POST':
+      f = request.files['file']
+      f.save(secure_filename(f.filename))
+      return 'file uploaded successfully'
 
 #method, request route
 api.add_resource(HelloWorld, "/helloworld")
 api.add_resource(HandTracked, "/hts")
-api.add_resource(ImgPost, "/post")
+# api.add_resource(ImgPost, "/post")
 
 
 ##Starta o server no debugger mode entao devmode
