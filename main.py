@@ -49,7 +49,7 @@ class ImgPost(Resource):
 
 @app.route('/post', methods = ['POST'])
 def upload_file():
-    print('chegou aqui!')
+   print('chegou aqui!')
    if request.method == 'POST':
       f = request.files['file']
       f.save(secure_filename(f.filename))
