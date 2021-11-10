@@ -1,6 +1,6 @@
 from typing import Sized
-# from flask.wrappers import Request
-# from werkzeug.utils import redirect, secure_filename
+from flask.wrappers import Request
+from werkzeug.utils import redirect, secure_filename
 from MediaPipe.mediapipeMain import handtracked
 from flask import Flask, request, flash,jsonify
 from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
@@ -33,7 +33,6 @@ class HelloWorld(Resource):
         print('deu boa')
         return {"data" : "Hello World"}
 
-
 class HandTracked(Resource):
     def get(self):
         return handtracked()
@@ -43,17 +42,19 @@ class ImgPost(Resource):
         print('cheogu aqui')
         file = request.files['image']
         img = Image.open(file.stream)
-        img.save('teste.jpg')
+        handtracked(img)
         return jsonify({'msg':'sucess','size':[img.width, img.height]}) 
-
 
 @app.route('/post', methods = ['POST'])
 def upload_file():
    print('chegou aqui!')
-   if request.method == 'POST':
-      f = request.files['file']
-      f.save(secure_filename(f.filename))
-      return 'file uploaded successfully'
+   print(request)
+   file = request.files['imgData']
+   img = Image.open(file.stream)
+   handtracked()
+   return 'file uploaded successfully'
+      #f = request.files['file']
+      #f.save(secure_filename(f.filename))
 
 #method, request route
 api.add_resource(HelloWorld, "/helloworld")
