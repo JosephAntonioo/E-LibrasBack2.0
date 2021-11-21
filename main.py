@@ -1,10 +1,8 @@
 from typing import Sized
 from flask.wrappers import Request
 from werkzeug.utils import redirect, secure_filename
-from MediaPipe.mediapipeMain import handtracked
 from flask import Flask, request, flash,jsonify
 from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
-from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 import cv2
 import mediapipe as mp
@@ -19,6 +17,10 @@ from io import BytesIO
 import matplotlib.pyplot as plt
 import cv2
 import io
+import HT
+import time
+import json
+
 
 ## Start Stuffs
 app = Flask(__name__)
@@ -39,7 +41,7 @@ class HandTracked(Resource):
 
 class ImgPost(Resource):
     def post(self):
-        print('cheogu aqui')
+
         file = request.files['image']
         img = Image.open(file.stream)
         handtracked(img)
@@ -47,14 +49,29 @@ class ImgPost(Resource):
 
 @app.route('/post', methods = ['POST'])
 def upload_file():
-   print('chegou aqui!')
-   print(request)
+   ini = time.time()
+   print('inicio do metodo:')
+   print(ini)
+   #Aqui precisa mt rodar um metodo pegando essa img entao vamos la
    file = request.files['imgData']
    img = Image.open(file.stream)
-   handtracked()
-   return 'file uploaded successfully'
-      #f = request.files['file']
-      #f.save(secure_filename(f.filename))
+   nome = 'teste.png'
+   img.save(nome)
+   #Aqui temos um metodo para selecionar a img e processar os pontos chave das mãos, deixa salvo a img com os pontos
+   #Logo em seguida processa os pontos chave da mão para fazer uma leitura de como ela está
+   #Porfim passa pelo array de array do alfabeto assim concluindo o metodo
+   #Caso tudo ocorra bem o retorno é a letra do alfabeto correspondente ao gest
+   #Por enquanto retornos de teste 
+   statusCode = HT.srcPicture('./' + nome)
+   fin = time.time()
+   print('final do  metodo:')
+   print(fin)
+   temp = fin - ini
+   print('tempo de execução:')
+   print(temp)
+   print('statusCode: ')
+   print(statusCode)
+   return statusCode
 
 #method, request route
 api.add_resource(HelloWorld, "/helloworld")
