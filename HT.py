@@ -31,14 +31,15 @@ def srcPicture(img):
     verifProxi(pontos)
     resultado = []
     resultado = leituraGesto(pontos)
-    descricaoG = resultado
     # print('Descrição do gesto :')
-    print(descricaoG)
+    print(resultado)
     # print('Letra Index :')
-    # print(indexLetra)
-    str1 = ''.join(descricaoG)
-    finalS = 'Descrição do gesto :' + str1
+    # # print(indexLetra)
+    # str1 = ''.join(descricaoG)
+    print(alfabeto.letras[1])
+    finalS = resultado[1] #, resultado[0]
     #Agora precisa rodar um metodo para fazer os parangole de sc
+    print(finalS)
     return finalS
 
 def handTrack(img):
@@ -204,25 +205,18 @@ def leituraGesto(pontos):
     # print('------------------------xx---------xx--------------------')
     # Faz o link com o array de array de alfabeto letras, que pode ser incrementado no futuro
     atual = proximidade.verificar_proximidade_DEDOS(pontos)
-    return atual
-    # for i, a in enumerate(alfabeto.letras):
-        # if(alfabeto.letras[i] == atual):
-        #     # print('I(index do alfabeto):')
-        #     # print(i)
-        #     # print('A(descricao do gesto):')
-        #     # print(a)
-        #     # print('Deu boa!!!!!!!!')
-        #     final = []
-        #     final.append(a)
-        #     final.append(i)
-        #     # print('return é [a,i]')
-        #     return final
-
-    # print('Deu ruim')
-    # return 'deu em nada'
-
-    #     if proximidade.verificar_proximidade_DEDOS(pontos) == alfabeto.letras[i]:
-    #         print(alfabeto.letras[i])
-    #     else:
-    #         print('ainda nao')
-    # return 'finalizou tudo amem ate q enfim rx o pae'
+    # return atual
+    for i, a in enumerate(alfabeto.letras):
+        if(alfabeto.letras[i] == atual):
+            # print('I(index do alfabeto):')
+            # print(i)
+            # print('A(descricao do gesto):')
+            # print(a)
+            # print('Deu boa!!!!!!!!')
+            final = []
+            final.append(a)
+            final.append(i)
+            # print('return é [a,i]')
+            return final
+    print('Deu ruim')
+    return 'deu em nada'

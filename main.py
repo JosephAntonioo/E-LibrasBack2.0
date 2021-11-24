@@ -1,5 +1,5 @@
 from typing import Sized
-from flask.wrappers import Request
+from flask.wrappers import Request, Response
 from werkzeug.utils import redirect, secure_filename
 from flask import Flask, request, flash,jsonify
 from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
@@ -71,7 +71,7 @@ def upload_file():
    print(temp)
    print('statusCode: ')
    print(statusCode)
-   return statusCode
+   return {'data':statusCode}
 
 #method, request route
 api.add_resource(HelloWorld, "/helloworld")
