@@ -70,8 +70,9 @@ def upload_file():
    print('tempo de execução:')
    print(temp)
    print('statusCode: ')
-   print(statusCode)
-   return {'data':statusCode}
+   letras = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W']
+   print(letras[statusCode])
+   return {'data':letras[statusCode]}
 
 #method, request route
 api.add_resource(HelloWorld, "/helloworld")
