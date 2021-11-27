@@ -23,7 +23,7 @@ import time
 import json
 import asyncio
 from modulos import alfabeto 
-
+import MediaPipeHP
 
 ## Start Stuffs
 app = Flask(__name__)
@@ -104,6 +104,79 @@ async def upload_file():
     print(statusCode)
     return {'data':statusCode}
 
+
+@app.route('/mediapipe', methods= ['POST'])
+async def teste():
+    file = request.files['imgData']
+    img = Image.open(file.stream)
+    nome = 'teste.png'
+    img.save(nome)
+    print('ok')
+    statusCode = await MediaPipeHP.handPoseM('./' + nome)
+    pontosHP = []
+    print(statusCode.count)
+    # print(statusCode)
+    j = 0
+    for pontos in statusCode:
+        # print('j:',j)
+        ponto = str(pontos)
+        pontoX = 0
+        pontoY = 0 
+        i = 0
+        for l in ponto:
+            # print('i:',i)
+            if(l == 'x'):
+                pontoX = float(ponto[i+3:i+10]) 
+                pontoX = pontoX * 1000
+                pontoX = int(pontoX)
+                # print(str(pontoX))
+            if(l == 'y'):
+                pontoY = float(ponto[i+3:i+10]) 
+                pontoY = pontoY * 1000
+                pontoY = int(pontoY)
+                # print(str(pontoY))
+            i+=1
+        final = [pontoX,pontoY]
+        pontosHP.append(final)
+        j+=1
+    # print(pontosHP)
+    print('[x,y]:', j)
+    if(j == 0):
+        return 'Nao foi possivel identificar a mao!'
+    print('letras para pegar o x e y:', i)                
+    print(pontosHP[1])
+
+    # ------------- Leitura dos gestos
+    print('--------Descrição Gesto')
+    descricaoGesto = await HT.MediaPipeTranslate(pontosHP)
+    print(descricaoGesto)
+
+    # ------------- Comparação das descrições dos gestos
+    print('--------Comparação Gesto')
+    letras = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W']
+    indexAlfabeto = -1
+    for i, a in enumerate(alfabeto.letras):
+            if(alfabeto.letras[i] == descricaoGesto):
+                print('I(index do alfabeto):')
+                print(i)
+                print('A(descricao do gesto):')
+                print(a)
+                print('Deu boa!!!!!!!!')
+                final = []
+                final.append(a)
+                print('ok')
+                print(a)
+                final.append(i)
+                indexAlfabeto = i
+                break
+    if(indexAlfabeto != -1):
+        print('Index encontrado:', indexAlfabeto)
+        if(indexAlfabeto < len(letras)):
+            print(letras[indexAlfabeto])
+            return letras[indexAlfabeto]
+    else:
+        print('Nao foi possivel identificar o gesto!')
+        return 'Nao foi possivel identificar o gesto!'
 
 #method, request route [END POINT]
 # api.add_resource(HelloWorld, "/helloworld")

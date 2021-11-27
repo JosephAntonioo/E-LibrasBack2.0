@@ -32,6 +32,25 @@ async def srcPicture(img):
     verifDedos(pontos)
     verifProxi(pontos)
     resultado = leituraGesto(pontos)
+    print(pontos)
+    # print('Descrição do gesto :')
+    # print(resultado)
+    # print('Letra Index :')
+    # # print(indexLetra)
+    # str1 = ''.join(descricaoG)
+    finalS = resultado #, resultado[0]
+    #Agora precisa rodar um metodo para fazer os parangole de sc
+    print(finalS)
+    return finalS
+
+async def MediaPipeTranslate(pontos):
+    print(pontos)
+    
+    
+    verifDedos(pontos)
+    verifProxi(pontos)
+    resultado = leituraGesto(pontos)
+    print(pontos)
     # print('Descrição do gesto :')
     # print(resultado)
     # print('Letra Index :')
@@ -222,9 +241,7 @@ def leituraGesto(pontos):
             # print('return é [a,i]')
     print(final[0])
     print(final[1])
-    return final[1]
-    print('Deu ruim')
-    return 'deu em nada'
+    return final[0]
 
 async def final(img):
     # print('ok')
