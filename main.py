@@ -104,6 +104,9 @@ async def upload_file():
     print(statusCode)
     return {'data':statusCode}
 
+@app.route('/hw', methods = ['GET'])
+def hw():
+    return 'Hello World!'
 
 @app.route('/mediapipe', methods= ['POST'])
 async def teste():
@@ -173,7 +176,7 @@ async def teste():
         print('Index encontrado:', indexAlfabeto)
         if(indexAlfabeto < len(letras)):
             print(letras[indexAlfabeto])
-            return letras[indexAlfabeto]
+            return {'data':str(letras[indexAlfabeto])}
     else:
         print('Nao foi possivel identificar o gesto!')
         return 'Nao foi possivel identificar o gesto!'

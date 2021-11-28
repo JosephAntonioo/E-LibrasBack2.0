@@ -44,9 +44,7 @@ async def srcPicture(img):
     return finalS
 
 async def MediaPipeTranslate(pontos):
-    print(pontos)
-    
-    
+    print(pontos)    
     verifDedos(pontos)
     verifProxi(pontos)
     resultado = leituraGesto(pontos)
