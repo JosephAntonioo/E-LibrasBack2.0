@@ -1,4 +1,5 @@
 from typing import Sized
+from flask.sessions import NullSession
 from flask.wrappers import Request, Response
 import numpy as np
 from werkzeug.utils import redirect, secure_filename
@@ -24,7 +25,7 @@ import json
 import asyncio
 from modulos import alfabeto 
 import MediaPipeHP
-
+import os
 ## Start Stuffs
 app = Flask(__name__)
 api = Api(app)
@@ -111,41 +112,57 @@ def hw():
 @app.route('/mediapipe', methods= ['POST'])
 async def teste():
     file = request.files['imgData']
+    file.seek(0, os.SEEK_END)
+    if file.tell() == 0:
+        return 'Nao contem imagem!'
     img = Image.open(file.stream)
-    nome = 'teste.png'
-    img.save(nome)
+    nome = 'teste.png' #Mudar nome da img
+    img.save(nome) #Salvar img é importante para o media pipe, final do metodo pode excluir eu acho
     print('ok')
-    statusCode = await MediaPipeHP.handPoseM('./' + nome)
-    pontosHP = []
+    statusCode = await MediaPipeHP.handPoseM('./' + nome) #Aqui ele envia o path da img e retorna uma lista dos pontos mas sem tratar é uma strng enorme chatona de pegar os pontos replace ajuda
+    if(statusCode == 'Nao foi possivel identificar a mao!'):
+        return statusCode
+    pontosHP = [] #Var para tratar e armazenar pontos elevado a 1000 para ficar como int
     print(statusCode.count)
     # print(statusCode)
     j = 0
+    #float to int ponto * 1000
+    # For para percorrer a string de cada ponto letra por letra,
+    # Assim que chegar no x e no y pega os valores nas casas seguintes
+    # Armazena esses valores em variaveis x y
+    # Multiplica por 1000 para ajudar na visualização e comparação dos dados
+    # Salva o ponto(x,y)
+    # Salva o ponto em pontos(ponto(x,y))
     for pontos in statusCode:
         # print('j:',j)
         ponto = str(pontos)
         pontoX = 0
         pontoY = 0 
+        # print(ponto)
         i = 0
         for l in ponto:
             # print('i:',i)
             if(l == 'x'):
+                # print(ponto[i+3:i+10])
                 pontoX = float(ponto[i+3:i+10]) 
                 pontoX = pontoX * 1000
                 pontoX = int(pontoX)
                 # print(str(pontoX))
             if(l == 'y'):
+                # print(ponto[i+3:i+10])
                 pontoY = float(ponto[i+3:i+10]) 
                 pontoY = pontoY * 1000
                 pontoY = int(pontoY)
+                
                 # print(str(pontoY))
             i+=1
         final = [pontoX,pontoY]
         pontosHP.append(final)
         j+=1
-    # print(pontosHP)
+    print(pontosHP)
     print('[x,y]:', j)
-    if(j == 0):
-        return 'Nao foi possivel identificar a mao!'
+    # if(j == 0):
+    #     return 'Nao foi possivel identificar a mao!'
     print('letras para pegar o x e y:', i)                
     print(pontosHP[1])
 
@@ -156,7 +173,7 @@ async def teste():
 
     # ------------- Comparação das descrições dos gestos
     print('--------Comparação Gesto')
-    letras = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W']
+    letras = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'L', 'M', 'N', 'O[BUG]', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W']
     indexAlfabeto = -1
     for i, a in enumerate(alfabeto.letras):
             if(alfabeto.letras[i] == descricaoGesto):

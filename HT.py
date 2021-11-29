@@ -225,21 +225,22 @@ def leituraGesto(pontos):
     atual = proximidade.verificar_proximidade_DEDOS(pontos)
     print('atual:', atual)
     # return atual
-    for i, a in enumerate(alfabeto.letras):
-        if(alfabeto.letras[i] == atual):
-            # print('I(index do alfabeto):')
-            # print(i)
-            # print('A(descricao do gesto):')
-            # print(a)
-            # print('Deu boa!!!!!!!!')
-            final = []
-            final.append(a)
-            print(a)
-            final.append(i)
-            # print('return é [a,i]')
-    print(final[0])
-    print(final[1])
-    return final[0]
+    # for i, a in enumerate(alfabeto.letras):
+    #     if(alfabeto.letras[i] == atual):
+    #         # print('I(index do alfabeto):')
+    #         # print(i)
+    #         # print('A(descricao do gesto):')
+    #         # print(a)
+    #         # print('Deu boa!!!!!!!!')
+    #         final = []
+    #         final.append(a)
+    #         print(a)
+    #         final.append(i)
+    #         # print('return é [a,i]')
+    # print(final[0])
+    # print(final[1])
+    # return final[0]
+    return atual
 
 async def final(img):
     # print('ok')
