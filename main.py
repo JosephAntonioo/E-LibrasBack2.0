@@ -29,27 +29,6 @@ import os
 ## Start Stuffs
 app = Flask(__name__)
 api = Api(app)
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-# db = SQLAlchemy(app)
-## Start Stuffs
-
-# class HelloWorld(Resource):
-#     def get(self):
-#         handtracked()
-#         print('deu boa')
-#         return {"data" : "Hello World"}
-
-# class HandTracked(Resource):
-#     def get(self):
-#         return handtracked()
-
-# class ImgPost(Resource):
-#     def post(self):
-
-#         file = request.files['image']
-#         img = Image.open(file.stream)
-#         handtracked(img)
-#         return jsonify({'msg':'sucess','size':[img.width, img.height]}) 
 
 async def teste():
     ini = time.time()
@@ -77,8 +56,8 @@ async def teste():
     print(letras[statusCode])
     return {'data':letras[statusCode]}
 
-@app.route('/post', methods = ['POST'])
-async def upload_file():
+@app.route('/modulos/descricao', methods = ['POST'])
+async def modulosDesc():
     ini = time.time()
     print('inicio do metodo:')
     print(ini)
@@ -110,7 +89,7 @@ def hw():
     return 'Hello World!'
 
 @app.route('/mediapipe', methods= ['POST'])
-async def teste():
+async def mediapipe():
     file = request.files['imgData']
     file.seek(0, os.SEEK_END)
     if file.tell() == 0:
