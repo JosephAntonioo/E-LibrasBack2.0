@@ -93,14 +93,14 @@ async def mediapipe():
     file = request.files['imgData']
     file.seek(0, os.SEEK_END)
     if file.tell() == 0:
-        return 'Nao contem imagem!'
+        return {'data':'Nao contem imagem!'}
     img = Image.open(file.stream)
     nome = 'teste.png' #Mudar nome da img
     img.save(nome) #Salvar img é importante para o media pipe, final do metodo pode excluir eu acho
     print('ok')
     statusCode = await MediaPipeHP.handPoseM('./' + nome) #Aqui ele envia o path da img e retorna uma lista dos pontos mas sem tratar é uma strng enorme chatona de pegar os pontos replace ajuda
     if(statusCode == 'Nao foi possivel identificar a mao!'):
-        return statusCode
+        return {'data':statusCode}
     pontosHP = [] #Var para tratar e armazenar pontos elevado a 1000 para ficar como int
     print(statusCode.count)
     # print(statusCode)
@@ -175,7 +175,7 @@ async def mediapipe():
             return {'data':str(letras[indexAlfabeto])}
     else:
         print('Nao foi possivel identificar o gesto!')
-        return 'Nao foi possivel identificar o gesto!'
+        return {'data': 'Nao foi possivel identificar o gesto!'}
 
 #method, request route [END POINT]
 # api.add_resource(HelloWorld, "/helloworld")
